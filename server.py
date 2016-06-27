@@ -1,6 +1,8 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import os
 import sqlite3
+import string
+import random
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -52,50 +54,70 @@ def initdb_command():
     print 'Initialized the database.'
 
 
+def post_id_generator(size=8, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
 @app.route('/')
 def show_entries():
-    db = get_db()
-    cur = db.execute('SELECT title, text FROM entries ORDER BY id DESC')
-    entries = cur.fetchall()
-    return render_template('show_entries.html', entries=entries)
+    return redirect(post_id_generator())
+    # db = get_db()
+    # cur = db.execute('SELECT title, text FROM entries ORDER BY id DESC')
+    # entries = cur.fetchall()
+    # return render_template('show_entries.html', entries=entries)
 
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
-    db = get_db()
-    # Use ? ? to prevent SQL injection
+# @app.route('/add', methods=['POST'])
+# def add_entry():
+#     if not session.get('logged_in'):
+#         abort(401)
+#     db = get_db()
+#     # Use ? ? to prevent SQL injection
+#
+#     # TODO: Strip the content in the 'text' field
+#     db.execute('INSERT INTO entries (title, text) VALUES (?, ?)',
+#                [request.form['title'], request.form['text']])
+#     db.commit()
+#     flash('New entry was successfully posted')
+#     return redirect(url_for('show_entries'))
+#
+#
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     """Storing as plaintext for simplicity now, Werkzeug has security helpers"""
+#     error = None
+#     if request.method == 'POST':
+#         if request.form['username'] != app.config['USERNAME']:
+#             error = 'Invalid username'
+#         elif request.form['password'] != app.config['PASSWORD']:
+#             error = 'Invalid password'
+#         else:
+#             session['logged_in'] = True
+#             flash('You were logged in')
+#             return redirect(url_for('show_entries'))
+#     return render_template('login.html', error=error)
+#
+#
+# @app.route('/logout')
+# def logout():
+#     session.pop('logged_in', None)
+#     flash('You were logged out')
+#     return redirect(url_for('show_entries'))
 
-    # TODO: Strip the content in the 'text' field
-    db.execute('INSERT INTO entries (title, text) VALUES (?, ?)',
-               [request.form['title'], request.form['text']])
-    db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('show_entries'))
+
+@app.route('/<string:post_id>')
+def show_post(post_id):
+    """A page for a new post"""
+    if not validate_post(post_id):
+        abort(404)
+
+    return post_id
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    """Storing as plaintext for simplicity now, Werkzeug has security helpers"""
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error)
-
-
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('show_entries'))
+def validate_post(post_id):
+    if len(post_id) != 8:
+        return False
+    return True
 
 
 if __name__ == "__main__":
