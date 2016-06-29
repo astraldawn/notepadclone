@@ -111,7 +111,34 @@ def show_post(post_id):
     if not validate_post(post_id):
         abort(404)
 
-    return post_id
+    content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tortor velit, gravida nec dui id, " \
+              "venenatis malesuada nunc. Nullam bibendum, arcu fermentum fermentum sagittis, ligula enim rhoncus " \
+              "nulla, quis commodo eros nibh quis arcu. Nunc dignissim lacus eu molestie auctor. Duis erat quam, " \
+              "scelerisque non viverra sit amet, gravida eget lectus. Maecenas egestas urna non gravida gravida. Cras " \
+              "quis tortor at massa vulputate blandit. Nunc aliquam, ipsum sit amet dignissim scelerisque, " \
+              "ligula diam volutpat tortor, molestie condimentum nisl massa quis nisi. Mauris non gravida nulla. " \
+              "Vestibulum a leo cursus, mollis tortor at, ultricies eros. Nulla posuere, mauris a pretium feugiat, " \
+              "ante arcu porta erat, in auctor leo ipsum quis eros. Aenean turpis urna, rhoncus eu placerat quis, " \
+              "imperdiet sit amet tortor. Phasellus rhoncus orci quis nisi faucibus luctus. Curabitur ut metus justo. " \
+              "Morbi eget cursus turpis, eget lobortis ex. Aliquam id elit lacinia, ullamcorper quam sit amet, " \
+              "placerat elit. Curabitur scelerisque libero et maximus porttitor. Suspendisse potenti. Fusce " \
+              "ullamcorper iaculis condimentum. Vestibulum dignissim molestie volutpat. Suspendisse potenti. Donec " \
+              "non interdum augue. Morbi venenatis sagittis augue vitae pellentesque. Maecenas non consequat odio. " \
+              "Pellentesque semper, ante at efficitur vestibulum, sapien libero mollis enim, et commodo arcu nisi in " \
+              "nibh. Duis tristique aliquam consectetur. Vestibulum volutpat sapien quis turpis pretium accumsan ut " \
+              "nec sem. Sed ultricies ornare felis ut commodo. Maecenas hendrerit leo eu nisi condimentum, " \
+              "in finibus libero mollis. Nullam erat elit, dignissim vitae sodales vel, congue posuere nulla. Nunc a " \
+              "euismod augue. Vivamus et arcu risus. Praesent vehicula libero eget mi pulvinar, sed condimentum purus " \
+              "vulputate. Integer sed interdum velit. Curabitur euismod felis metus, vitae dignissim sem viverra " \
+              "eget. Nunc fringilla, odio sit amet iaculis consectetur, arcu erat efficitur nisl, eget ultricies " \
+              "augue turpis non nunc.Suspendisse nec rutrum dolor. Curabitur vulputate enim ultrices ligula iaculis, " \
+              "a porttitor lectus porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere " \
+              "cubilia Curae; Nulla rutrum sollicitudin justo, ornare convallis tortor ornare eget. Maecenas " \
+              "fringilla leo porta sapien semper facilisis. Phasellus urna orci, lobortis quis ex non, sollicitudin " \
+              "consequat nulla. Aenean nec mauris quam. Phasellus vitae auctor est. Cras elit nulla, laoreet vel " \
+              "felis in, laoreet pulvinar urna. Quisque dictum accumsan turpis, sit amet iaculis orci porttitor quis. " \
+              "Nulla tincidunt ornare placerat. Nam porta nisl a elit mollis lacinia. "
+    return render_template('layout.html', content=content, post_id=post_id, word_count=0, lines=0)
 
 
 def validate_post(post_id):

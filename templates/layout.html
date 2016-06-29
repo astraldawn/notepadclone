@@ -1,17 +1,42 @@
-<!doctype html>
-<title>Flaskr</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-    <h1>Flaskr</h1>
-    <div class=metanav>
-        {% if not session.logged_in %}
-            <a href="{{ url_for('login') }}">log in</a>
-        {% else %}
-            <a href="{{ url_for('logout') }}">log out</a>
-        {% endif %}
+<html>
+<head>
+    <title>notepad.cc clone</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container-fluid col-md-10 col-md-offset-1">
+    <div class="well bs-component">
+        <fieldset>
+            <div class="form-group">
+                <div class="container-fluid">
+                    <textarea class="form-control" id="textArea"> {{ content }} </textarea>
+{#                    To update the word count and line count, AJAX query is required#}
+                    <span class="help-block">post_id: {{ post_id }}, word_count: {{ word_count }}, lines: {{ lines }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="container-fluid">
+                    {#                        Add in something to switch between justified and not, also to save the stuff to account#}
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </fieldset>
+        </form>
+        {#    <h1>Flaskr</h1>#}
+        {#    <div class=metanav>#}
+        {#        {% if not session.logged_in %}#}
+        {#            <a href="{{ url_for('login') }}">log in</a>#}
+        {#        {% else %}#}
+        {#            <a href="{{ url_for('logout') }}">log out</a>#}
+        {#        {% endif %}#}
+        {#    </div>#}
+        {#    {% for message in get_flashed_messages() %}#}
+        {#        <div class=flash>{{ message }}</div>#}
+        {#    {% endfor %}#}
+        {% block body %}{% endblock %}
     </div>
-    {% for message in get_flashed_messages() %}
-        <div class=flash>{{ message }}</div>
-    {% endfor %}
-    {% block body %}{% endblock %}
-</div>
+</body>
+</html>
