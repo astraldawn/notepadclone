@@ -3,24 +3,33 @@
     <title>notepad.cc clone</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+    <!-- Static imports -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
 </head>
-<body>
+<body onload="counter()">
 <div class="container-fluid col-md-10 col-md-offset-1">
     <div class="well bs-component">
         <fieldset>
             <div class="form-group">
                 <div class="container-fluid">
-                    <textarea class="form-control" id="textArea"> {{ content }} </textarea>
-{#                    To update the word count and line count, AJAX query is required#}
-                    <span class="help-block">post_id: {{ post_id }}, word_count: {{ word_count }}, lines: {{ lines }}</span>
+                    <div class="pull-right">
+                        <button class="btn btn-default" onclick="toggleJustify()">Justify toggle</button>
+                        <button type="submit" class="btn btn-primary" onclick="saveContent()">Submit</button>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="container-fluid">
-                    {#                        Add in something to switch between justified and not, also to save the stuff to account#}
-                    <button type="reset" class="btn btn-default">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <textarea class="form-control" id="textArea" spellcheck="false"> {{ content }} </textarea>
+                    <span class="help-block">
+                        <span>post_id: {{ post_id }}, </span>
+                        <span>word_count: <span id="wordCount">0</span>, </span>
+                        <span>caret position: <span id="caretPos">0</span>, </span>
+                        <span>scroll position: <span id="scrollTop">0</span></span>
+                    </span>
                 </div>
             </div>
         </fieldset>
@@ -38,5 +47,6 @@
         {#    {% endfor %}#}
         {% block body %}{% endblock %}
     </div>
+</div>
 </body>
 </html>
