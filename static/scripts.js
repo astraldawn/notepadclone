@@ -49,6 +49,8 @@ toggleJustify = function () {
 
 /* Saving to the server */
 saveContent = function () {
-    alert("Saves content to server");
+    var caretPos = $('#textArea')[0].selectionStart;
+    var scrollTop = $('#textArea')[0].scrollTop;
+    alert("Saves content to server " + caretPos + " " + scrollTop);
     return false;
 };
