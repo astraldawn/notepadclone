@@ -9,7 +9,7 @@
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
     <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
 </head>
-<body onload="counter()">
+<body onload="load_page( {{ caretPos }}, {{ scrollTop }})">
 <div class="container-fluid col-md-10 col-md-offset-1">
     <div class="well bs-component">
         <fieldset>
@@ -23,12 +23,12 @@
             </div>
             <div class="form-group">
                 <div class="container-fluid">
-                    <textarea class="form-control" id="textArea" spellcheck="false"> {{ content }} </textarea>
+                    <textarea class="form-control" id="textArea" spellcheck="false">{{ content }}</textarea>
                     <span class="help-block">
                         <span>post_id: {{ post_id }}, </span>
                         <span>word_count: <span id="wordCount">0</span>, </span>
-                        <span>caret position: <span id="caretPos">0</span>, </span>
-                        <span>scroll position: <span id="scrollTop">0</span></span>
+                        <span>caret position: <span id="caretPos">{{ caretPos }}</span>, </span>
+                        <span>scroll position: <span id="scrollTop">{{ scrollTop }}</span></span>
                     </span>
                 </div>
             </div>

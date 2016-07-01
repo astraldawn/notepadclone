@@ -3,6 +3,7 @@ import os
 import sqlite3
 import string
 import random
+import json
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -138,13 +139,21 @@ def show_post(post_id):
               "consequat nulla. Aenean nec mauris quam. Phasellus vitae auctor est. Cras elit nulla, laoreet vel " \
               "felis in, laoreet pulvinar urna. Quisque dictum accumsan turpis, sit amet iaculis orci porttitor quis. " \
               "Nulla tincidunt ornare placerat. Nam porta nisl a elit mollis lacinia. "
-    return render_template('layout.html', content=content, post_id=post_id, word_count=0, lines=0)
+    return render_template('layout.html', content=content, post_id=post_id, caretPos=0, scrollTop=0)
 
 
 def validate_post(post_id):
     if len(post_id) != 8:
         return False
     return True
+
+
+@app.route('/save_post', methods=['POST'])
+def save_post():
+    print request.form["content"]
+    print request.form["caretPos"]
+    print request.form["scrollTop"]
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":

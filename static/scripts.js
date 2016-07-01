@@ -8,19 +8,13 @@ counter = function () {
 
     if (value.length == 0) {
         $('#wordCount').html(0);
-        $('#caretPos').html(0);
-        $('#scrollTop').html(0);
         return;
     }
 
     var regex = /\s+/gi;
     var wordCount = value.trim().replace(regex, ' ').split(' ').length;
-    var caretPos = $('#textArea')[0].selectionStart;
-    var scrollTop = $('#textArea')[0].scrollTop;
 
     $('#wordCount').html(wordCount);
-    $('#caretPos').html(caretPos);
-    $('#scrollTop').html(scrollTop);
 };
 
 $(document).ready(function () {
@@ -34,6 +28,12 @@ $(document).ready(function () {
     $('#textArea').mouseup(counter);
     $('#textArea').scroll(counter);
 });
+
+load_page = function (caretPos, scrollTop) {
+    counter();
+    $('#textArea')[0].scrollTop = scrollTop;
+    $('#textArea')[0].selectionStart = caretPos;
+};
 
 /* GUI functions */
 var justify = false;
@@ -49,8 +49,14 @@ toggleJustify = function () {
 
 /* Saving to the server */
 saveContent = function () {
+    var content = $('#textArea').val();
     var caretPos = $('#textArea')[0].selectionStart;
     var scrollTop = $('#textArea')[0].scrollTop;
-    alert("Saves content to server " + caretPos + " " + scrollTop);
+    var data = {
+        "content": content,
+        "caretPos": caretPos,
+        "scrollTop": scrollTop
+    };
+    $.post("../save_post", data);
     return false;
 };
