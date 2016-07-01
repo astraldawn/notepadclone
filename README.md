@@ -14,6 +14,7 @@ To run test suite: python tests.py
 - Write tests for saving / loading from URL
 - A view page (no edits)
 - password protection of an individual note
+- changing the font size
 
 # Not happening
 - concurrent usage
