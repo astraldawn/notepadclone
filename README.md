@@ -13,3 +13,7 @@ To run test suite: python tests.py
 - Convert front end to react
 - Write tests for saving / loading from URL
 - A view page (no edits)
+- password protection of an individual note
+
+# Not happening
+- concurrent usage
