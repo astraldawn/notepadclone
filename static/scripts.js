@@ -34,12 +34,13 @@ $(document).ready(function () {
 });
 
 loadPage = function (caretPos, scrollTop, fontSizeFromServer) {
-    counter();
-    $('#textArea')[0].scrollTop = scrollTop;
-    $('#textArea')[0].selectionStart = caretPos;
     $('#textArea').css({"font-size": fontSizeFromServer + "px"});
+    $('#textArea')[0].selectionStart = caretPos;
     fontSize = fontSizeFromServer;
     prettyFontButtons();
+
+    // This is so weird only works if its shifted down
+    $('#textArea').scrollTop(scrollTop);
 };
 
 /* GUI functions */

@@ -56,6 +56,7 @@ def initdb_command():
 
 
 def post_id_generator(size=8, chars=string.ascii_lowercase + string.digits):
+    # this function should check if the ID already exists in the DB
     return ''.join(random.choice(chars) for _ in range(size))
 
 
@@ -112,6 +113,7 @@ def show_post(post_id):
     """A page for a new post as well as for saving a post"""
     if request.method == 'POST':
         print "POST: ", post_id, request.form
+
         db = get_db()
 
         data = [(post_id,
