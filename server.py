@@ -10,12 +10,12 @@ app.config.from_object(__name__)
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'flaskr.db'),
+    DATABASE=os.path.join(app.root_path, 'database.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='default'
 ))
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+app.config.from_envvar('SERVER_SETTINGS', silent=True)
 
 
 def connect_db():
@@ -111,46 +111,45 @@ def show_entries():
 def show_post(post_id):
     """A page for a new post as well as for saving a post"""
     if request.method == 'POST':
-        # Do some magic with the DB here
-        print request.form["content"]
-        print request.form["caretPos"]
-        print request.form["scrollTop"]
-        print request.form["fontSize"]
+        print "POST: ", post_id, request.form
+        db = get_db()
+
+        data = [(post_id,
+                 request.form['content'],
+                 int(request.form['caretPos']),
+                 int(request.form['scrollTop']),
+                 int(request.form['fontSize'])
+                 )]
+
+        # Use ? ? to prevent SQL injection
+        db.executemany(
+            'INSERT OR REPLACE INTO posts VALUES (?, ?, ?, ?, ?)', data
+        )
+
+        db.commit()
+
         return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
     if not validate_post(post_id):
         abort(404)
 
-    content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tortor velit, gravida nec dui id, " \
-              "venenatis malesuada nunc. Nullam bibendum, arcu fermentum fermentum sagittis, ligula enim rhoncus " \
-              "nulla, quis commodo eros nibh quis arcu. Nunc dignissim lacus eu molestie auctor. Duis erat quam, " \
-              "scelerisque non viverra sit amet, gravida eget lectus. Maecenas egestas urna non gravida gravida. Cras " \
-              "quis tortor at massa vulputate blandit. Nunc aliquam, ipsum sit amet dignissim scelerisque, " \
-              "ligula diam volutpat tortor, molestie condimentum nisl massa quis nisi. Mauris non gravida nulla. " \
-              "Vestibulum a leo cursus, mollis tortor at, ultricies eros. Nulla posuere, mauris a pretium feugiat, " \
-              "ante arcu porta erat, in auctor leo ipsum quis eros. Aenean turpis urna, rhoncus eu placerat quis, " \
-              "imperdiet sit amet tortor. Phasellus rhoncus orci quis nisi faucibus luctus. Curabitur ut metus justo. " \
-              "Morbi eget cursus turpis, eget lobortis ex. Aliquam id elit lacinia, ullamcorper quam sit amet, " \
-              "placerat elit. Curabitur scelerisque libero et maximus porttitor. Suspendisse potenti. Fusce " \
-              "ullamcorper iaculis condimentum. Vestibulum dignissim molestie volutpat. Suspendisse potenti. Donec " \
-              "non interdum augue. Morbi venenatis sagittis augue vitae pellentesque. Maecenas non consequat odio. " \
-              "Pellentesque semper, ante at efficitur vestibulum, sapien libero mollis enim, et commodo arcu nisi in " \
-              "nibh. Duis tristique aliquam consectetur. Vestibulum volutpat sapien quis turpis pretium accumsan ut " \
-              "nec sem. Sed ultricies ornare felis ut commodo. Maecenas hendrerit leo eu nisi condimentum, " \
-              "in finibus libero mollis. Nullam erat elit, dignissim vitae sodales vel, congue posuere nulla. Nunc a " \
-              "euismod augue. Vivamus et arcu risus. Praesent vehicula libero eget mi pulvinar, sed condimentum purus " \
-              "vulputate. Integer sed interdum velit. Curabitur euismod felis metus, vitae dignissim sem viverra " \
-              "eget. Nunc fringilla, odio sit amet iaculis consectetur, arcu erat efficitur nisl, eget ultricies " \
-              "augue turpis non nunc.Suspendisse nec rutrum dolor. Curabitur vulputate enim ultrices ligula iaculis, " \
-              "a porttitor lectus porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere " \
-              "cubilia Curae; Nulla rutrum sollicitudin justo, ornare convallis tortor ornare eget. Maecenas " \
-              "fringilla leo porta sapien semper facilisis. Phasellus urna orci, lobortis quis ex non, sollicitudin " \
-              "consequat nulla. Aenean nec mauris quam. Phasellus vitae auctor est. Cras elit nulla, laoreet vel " \
-              "felis in, laoreet pulvinar urna. Quisque dictum accumsan turpis, sit amet iaculis orci porttitor quis. " \
-              "Nulla tincidunt ornare placerat. Nam porta nisl a elit mollis lacinia. "
+    db = get_db()
+    cur = db.execute('SELECT * FROM posts WHERE id=:id', {"id": post_id})
+    entries = cur.fetchall()
+
+    print "GET: ", entries, len(entries)
+
+    content = ""
     caret_pos = 0
     scroll_top = 0
     font_size = 15
+
+    if entries:
+        content = entries[0][1]
+        caret_pos = entries[0][2]
+        scroll_top = entries[0][3]
+        font_size = entries[0][4]
+
     return render_template('layout.html',
                            content=content,
                            postID=post_id,
