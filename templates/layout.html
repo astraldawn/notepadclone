@@ -8,32 +8,32 @@
     <!-- Static imports -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
     <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body onload="load_page( {{ caretPos }}, {{ scrollTop }})">
+<body onload="loadPage( {{ caretPos }}, {{ scrollTop }}, {{ fontSize }})">
 <div class="container-fluid col-md-10 col-md-offset-1">
     <div class="well bs-component">
-        <fieldset>
-            <div class="form-group">
-                <div class="container-fluid">
-                    <div class="pull-right">
-                        <button class="btn btn-default" onclick="toggleJustify()">Justify toggle</button>
-                        <button type="submit" class="btn btn-primary" onclick="saveContent()">Submit</button>
-                    </div>
+        <div class="form-group">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <i id="fontInc" class="material-icons md-36 md-dark" onclick="toggleFont(true)">add</i>
+                    <i id="fontDec" class="material-icons md-36 md-dark" onclick="toggleFont(false)">remove</i>
+                    <i id="justifyIcon" class="material-icons md-36 md-dark md-inactive" onclick="toggleJustify()">reorder</i>
+                    <i class="material-icons md-36 md-dark" onclick="saveContent('{{ postID }}')">done</i>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="container-fluid">
-                    <textarea class="form-control" id="textArea" spellcheck="false">{{ content }}</textarea>
+        </div>
+        <div class="form-group">
+            <div class="container-fluid">
+                <textarea class="form-control" id="textArea" spellcheck="false">{{ content }}</textarea>
                     <span class="help-block">
-                        <span>post_id: {{ post_id }}, </span>
-                        <span>word_count: <span id="wordCount">0</span>, </span>
-                        <span>caret position: <span id="caretPos">{{ caretPos }}</span>, </span>
-                        <span>scroll position: <span id="scrollTop">{{ scrollTop }}</span></span>
+{#                        <span>post_id: {{ postID }}</span>#}
+                        <span id="wordCount" class="text-muted pull-right" style="font-size:30px">0</span>
                     </span>
-                </div>
             </div>
-        </fieldset>
-        </form>
+        </div>
         {#    <h1>Flaskr</h1>#}
         {#    <div class=metanav>#}
         {#        {% if not session.logged_in %}#}

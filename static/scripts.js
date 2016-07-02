@@ -2,6 +2,10 @@
  * Created by mark on 7/1/16.
  */
 
+/* Global settings for GUI */
+var fontSize = 15;
+var justify = false;
+
 /* Counter */
 counter = function () {
     var value = $('#textArea').val();
@@ -29,34 +33,60 @@ $(document).ready(function () {
     $('#textArea').scroll(counter);
 });
 
-load_page = function (caretPos, scrollTop) {
+loadPage = function (caretPos, scrollTop, fontSizeFromServer) {
     counter();
     $('#textArea')[0].scrollTop = scrollTop;
     $('#textArea')[0].selectionStart = caretPos;
+    $('#textArea').css({"font-size": fontSizeFromServer + "px"});
+    fontSize = fontSizeFromServer;
+    prettyFontButtons();
 };
 
 /* GUI functions */
-var justify = false;
-
 toggleJustify = function () {
     if (!justify) {
         $('#textArea').css({"text-align": "justify"});
+        $('#justifyIcon').removeClass("md-inactive");
+
     } else {
         $('#textArea').css({"text-align": "left"});
+        $('#justifyIcon').addClass("md-inactive");
     }
     justify = !justify;
 };
 
+toggleFont = function (inc) {
+    if (inc) {
+        if (fontSize < 30) fontSize += 1;
+    } else {
+        if (fontSize > 10) fontSize -= 1;
+    }
+    prettyFontButtons();
+    $('#textArea').css({"font-size": fontSize + "px"});
+};
+
+prettyFontButtons = function () {
+    if (fontSize == 10) {
+        $('#fontDec').addClass("md-inactive");
+    } else if (fontSize == 30) {
+        $('#fontInc').addClass("md-inactive");
+    } else {
+        $('#fontInc').removeClass("md-inactive");
+        $('#fontDec').removeClass("md-inactive");
+    }
+};
+
 /* Saving to the server */
-saveContent = function () {
+saveContent = function (pid) {
     var content = $('#textArea').val();
     var caretPos = $('#textArea')[0].selectionStart;
     var scrollTop = $('#textArea')[0].scrollTop;
     var data = {
         "content": content,
         "caretPos": caretPos,
-        "scrollTop": scrollTop
+        "scrollTop": scrollTop,
+        "fontSize": fontSize
     };
-    $.post("../save_post", data);
+    $.post("../" + pid, data);
     return false;
 };

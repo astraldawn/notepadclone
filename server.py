@@ -106,9 +106,18 @@ def show_entries():
 #     return redirect(url_for('show_entries'))
 
 
-@app.route('/<string:post_id>')
+# should combine show and save into a single route
+@app.route('/<string:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
-    """A page for a new post"""
+    """A page for a new post as well as for saving a post"""
+    if request.method == 'POST':
+        # Do some magic with the DB here
+        print request.form["content"]
+        print request.form["caretPos"]
+        print request.form["scrollTop"]
+        print request.form["fontSize"]
+        return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
     if not validate_post(post_id):
         abort(404)
 
@@ -139,21 +148,21 @@ def show_post(post_id):
               "consequat nulla. Aenean nec mauris quam. Phasellus vitae auctor est. Cras elit nulla, laoreet vel " \
               "felis in, laoreet pulvinar urna. Quisque dictum accumsan turpis, sit amet iaculis orci porttitor quis. " \
               "Nulla tincidunt ornare placerat. Nam porta nisl a elit mollis lacinia. "
-    return render_template('layout.html', content=content, post_id=post_id, caretPos=0, scrollTop=0)
+    caret_pos = 0
+    scroll_top = 0
+    font_size = 15
+    return render_template('layout.html',
+                           content=content,
+                           postID=post_id,
+                           caretPos=caret_pos,
+                           scrollTop=scroll_top,
+                           fontSize=font_size)
 
 
 def validate_post(post_id):
     if len(post_id) != 8:
         return False
     return True
-
-
-@app.route('/save_post', methods=['POST'])
-def save_post():
-    print request.form["content"]
-    print request.form["caretPos"]
-    print request.form["scrollTop"]
-    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":
