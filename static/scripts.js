@@ -41,6 +41,7 @@ loadPage = function (caretPos, scrollTop, fontSizeFromServer) {
 
     // This is so weird only works if its shifted down
     $('#textArea').scrollTop(scrollTop);
+    $('#textArea').focus();
 };
 
 /* GUI functions */
