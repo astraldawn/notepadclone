@@ -79,7 +79,7 @@ prettyFontButtons = function () {
 };
 
 /* Saving to the server */
-saveContent = function (pid) {
+saveContent = function () {
     var content = $('#textArea').val();
     var caretPos = $('#textArea')[0].selectionStart;
     var scrollTop = $('#textArea')[0].scrollTop;
@@ -89,6 +89,6 @@ saveContent = function (pid) {
         "scrollTop": scrollTop,
         "fontSize": fontSize
     };
-    $.post("../" + pid, data);
+    $.post(window.location.href, data);
     return false;
 };
