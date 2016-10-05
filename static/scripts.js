@@ -31,6 +31,7 @@ $(document).ready(function () {
     $('#textArea').mousedown(counter);
     $('#textArea').mouseup(counter);
     $('#textArea').scroll(counter);
+    $('#textArea').keyup(saveContent);
 });
 
 loadPage = function (caretPos, scrollTop, fontSizeFromServer) {
